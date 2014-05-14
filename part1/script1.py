@@ -23,11 +23,11 @@ for i, doc in enumerate(documents):
 	
 	# group the author, translator, and illustrator into relevant groups
 	if author:
-		author.group('author')
+		author = author.group('author')
 	if translator:
-		translator.group('translator')
+		translator = translator.group('translator')
 	if illustrator:
-		illustrator.group('illustrator')
+		illustrator = illustrator.group('illustrator')
 	
 	# print out the results
 	print "***" * 25
