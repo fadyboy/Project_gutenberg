@@ -23,46 +23,48 @@ illustrator_search = re.compile(r'(illustrator:*)(?P<illustrator>.*)', re.IGNORE
 
 
 # iterate through all the files in the directory
-for doc_no, file_name in enumerate(os.listdir(directory)):
-    file_path = os.path.join(directory, file_name)  # assign the full path of the file name by adding the directory path
+for file_name in (os.listdir(directory)):
+    if file_name.endswith('.txt'):   # check that files are text files
 
-    # open each file and read from it assigning the text to a variable file_text
-    with open(file_path, 'r') as read_file:
-        file_text = read_file.read()
+        file_path = os.path.join(directory, file_name)  # assign the full path of the file name by adding the directory path
 
-    # group the title, author, translator and illustrator and print details
+        # open each file and read from it assigning the text to a variable file_text
+        with open(file_path, 'r') as read_file:
+            file_text = read_file.read()
 
-    title = re.search(title_search, file_text).group('title')
-    author = re.search(author_search, file_text)
-    translator = re.search(translator_search, file_text)
-    illustrator = re.search(illustrator_search, file_text)
+        # group the title, author, translator and illustrator and print details
 
-    if author:
-        author = author.group('author')
-    if translator:
-        translator = translator.group('translator')
-    if illustrator:
-        illustrator = illustrator.group('illustrator')
+        title = re.search(title_search, file_text).group('title')
+        author = re.search(author_search, file_text)
+        translator = re.search(translator_search, file_text)
+        illustrator = re.search(illustrator_search, file_text)
 
-    # print out the results
-    print "***" * 25
-    print ""
-    print "Here are the info for file {}".format(file_name)
-    print "The title of the text is {}".format(title)
-    print "The author is {}".format(author)
-    print "The translator is {}".format(translator)
-    print "The illustrator is {}".format(illustrator)
-    print ""
+        if author:
+            author = author.group('author')
+        if translator:
+            translator = translator.group('translator')
+        if illustrator:
+            illustrator = illustrator.group('illustrator')
 
-    # count how many times the keywords searched for appear in the searched texts and print
-    print "Here is the counts for the keywords searched:"
+        # print out the results
+        print "***" * 25
+        print ""
+        print "Here are the info for file {}".format(file_name)
+        print "The title of the text is {}".format(title)
+        print "The author is {}".format(author)
+        print "The translator is {}".format(translator)
+        print "The illustrator is {}".format(illustrator)
+        print ""
 
-    for keyword in keyword_searches:
-        keyword_count = len(re.findall(keyword, file_text))
-        print "\"{0}\": {1}".format(keyword, keyword_count)
+        # count how many times the keywords searched for appear in the searched texts and print
+        print "Here is the counts for the keywords searched:"
 
-    print ""
-    
+        for keyword in keyword_searches:
+            keyword_count = len(re.findall(keyword, file_text))
+            print "\"{0}\": {1}".format(keyword, keyword_count)
+
+        print ""
+
 
 
 
