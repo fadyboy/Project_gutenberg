@@ -16,7 +16,8 @@ for keywords in sys.argv[2:]:
     keyword_searches[keywords] = re.compile(r'\b '+ keywords + r'\b', re.IGNORECASE)
 
 # generate regex patterns for title, author, illustrator and translator
-title_search = re.compile(r'(title:\s*)(?P<title>[a-zA-Z, \n].* \s)', re.IGNORECASE|re.VERBOSE)
+title_search = re.compile(r'(title:\s*)(?P<title>[a-zA-Z, \n].* \s)', re.IGNORECASE|re.VERBOSE)# remove space b4 \s
+#title_search = re.compile(r'(title:/s*)(?P<title>[a-zA-Z, \n].*\s)', re.IGNORECASE)
 author_search = re.compile(r'(author:*)(?P<author>.*)', re.IGNORECASE)
 translator_search = re.compile(r'(translator:*)(?P<translator>.*)', re.IGNORECASE)
 illustrator_search = re.compile(r'(illustrator:*)(?P<illustrator>.*)', re.IGNORECASE)
@@ -29,6 +30,7 @@ for file_name in (os.listdir(directory)):
         file_path = os.path.join(directory, file_name)  # assign the full path of the file name by adding the directory path
 
         # open each file and read from it assigning the text to a variable file_text
+        file_text = "" # assign file_text to an empty string first to guard against variable scoping
         with open(file_path, 'r') as read_file:
             file_text = read_file.read()
 
@@ -60,7 +62,7 @@ for file_name in (os.listdir(directory)):
         print "Here is the counts for the keywords searched:"
 
         for keyword in keyword_searches:
-            keyword_count = len(re.findall(keyword, file_text))
+            keyword_count = len(re.findall(keyword_searches[keyword], file_text)) # use the keyword value from keyword_searches
             print "\"{0}\": {1}".format(keyword, keyword_count)
 
         print ""
