@@ -1,3 +1,6 @@
+# Script reads documents that are text files and extracts metadata details for the title, author, translator
+# and illustrator. Also searches for specified keywords and counts the number of times they appear in document
+
 import os
 import sys
 import re
@@ -49,12 +52,12 @@ def documentMetadata():
     return doc_metadata
 
 
-def getFiles(directory):
+def getFiles(directory, keywords):
     '''
         This function iterates over all the files in the folder specified at runtime and prints the outputs
     '''
 
-    # use document metadata search patterns to search for document details
+    # use document metadata search patterns to search for document details by calling the documentMetadata function
     search_patterns = documentMetadata()
 
     for file_name in os.listdir(directory):
@@ -65,6 +68,8 @@ def getFiles(directory):
             with open(file_path, 'r') as read_file:
                 file_text = read_file.read()
 
+            # assign result of the search patterns to the title, author, translator, and illustrator variables using
+            # the index values of the search_patterns list
             title = re.search(search_patterns[0],file_text).group('title')
             author = re.search(search_patterns[1], file_text)
             translator = re.search(search_patterns[2], file_text)
@@ -89,15 +94,24 @@ def getFiles(directory):
             keywordCount(keywords, file_text)
 
 
-# call the main function
-if __name__ == "__main__":
-    # set the directory path
+def main():
+    '''
+        This is the main function that runs the program, it assigns the directory path and keywords to the directory
+        and keywords variables supplied by the user at runtime
+    '''
+    # assign the directory path
     directory = sys.argv[1]
-    # assign the user specified keywords to be search for
+
+    # assign the user specified keywords to be search for to the keywords variable
     keywords = sys.argv[2:]
 
     # generate the regex patterns for keywords
     keywordPatterns(keywords)
 
     # iterate through files in directory and print results to the terminal
-    getFiles(directory)
+    getFiles(directory, keywords)
+
+
+# call the main function
+if __name__ == "__main__":
+    main()
